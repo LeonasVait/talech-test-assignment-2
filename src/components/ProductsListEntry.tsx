@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardProps } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 
 import { Product } from "../fixtures/MockData";
 

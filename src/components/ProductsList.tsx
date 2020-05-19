@@ -7,9 +7,11 @@ import { ProductsListEntry } from "./ProductsListEntry";
 export function ProductsList() {
   return (
     <List>
-      {data.map((entry, index) => (
-        <ProductsListEntry product={entry}></ProductsListEntry>
-      ))}
+      {data.length > 0
+        ? data.map((entry, index) => (
+            <ProductsListEntry product={entry}></ProductsListEntry>
+          ))
+        : "There are no products"}
     </List>
   );
 }

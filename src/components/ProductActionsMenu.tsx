@@ -1,8 +1,15 @@
 import React from "react";
 import { Menu, Button, MenuItem } from "@material-ui/core";
+import { ProductDeleteDialog } from "./ProductDeleteDialog";
+import { Product } from "../fixtures/MockData";
 
-export function ProductActionsMenu() {
+interface Props {
+  product: Product;
+}
+
+export function ProductActionsMenu({ product }: Props) {
   const [anchorElement, setAnchorElement] = React.useState(null);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
   const handleClick = (event: any) => {
     setAnchorElement(event.currentTarget);
@@ -10,6 +17,15 @@ export function ProductActionsMenu() {
 
   const handleClose = () => {
     setAnchorElement(null);
+  };
+
+  const handleEdit = () => {
+    handleClose();
+  };
+
+  const handleDelete = () => {
+    setDeleteDialogOpen(true);
+    handleClose();
   };
 
   return (
@@ -27,9 +43,14 @@ export function ProductActionsMenu() {
         open={Boolean(anchorElement)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Edit</MenuItem>
-        <MenuItem onClick={handleClose}>Delete</MenuItem>
+        <MenuItem onClick={handleEdit}>Edit</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
+      <ProductDeleteDialog
+        open={isDeleteDialogOpen}
+        product={product}
+        onClose={() => setDeleteDialogOpen(false)}
+      ></ProductDeleteDialog>
     </>
   );
 }

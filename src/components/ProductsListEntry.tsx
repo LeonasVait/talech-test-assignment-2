@@ -32,48 +32,50 @@ function ProductField({
 export function ProductsListEntry({ product }: Props) {
   const classes = useStyles();
   return (
-    <Card className={classes.root} elevation={3}>
-      <CardContent>
-        <div className={classes.productHeader}>
-          <Typography className={classes.title}>
-            {product.name.toUpperCase()}
-          </Typography>
+    <>
+      <Card className={classes.root} elevation={3}>
+        <CardContent>
+          <div className={classes.productHeader}>
+            <Typography className={classes.title}>
+              {product.name.toUpperCase()}
+            </Typography>
 
-          <ProductActionsMenu product={product}></ProductActionsMenu>
-        </div>
-
-        <div className={classes.productFields}>
-          <ProductField
-            name={"Type"}
-            value={product.type}
-            flex="3"
-          ></ProductField>
-
-          <ProductField
-            name={"EAN"}
-            value={product.ean}
-            flex="2"
-          ></ProductField>
-
-          <ProductField
-            name={"Color"}
-            value={product.color}
-            flex="2"
-          ></ProductField>
-
-          <ProductField
-            flex="2"
-            name={"Weight kg"}
-            value={product.weight.toFixed(2)}
-          ></ProductField>
-
-          <div className={classes.fieldContainer}>
-            <Typography color="textSecondary">Active</Typography>
-            <Checkbox defaultChecked={product.active}></Checkbox>
+            <ProductActionsMenu product={product}></ProductActionsMenu>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+
+          <div className={classes.productFields}>
+            <ProductField
+              name={"Type"}
+              value={product.type}
+              flex="3"
+            ></ProductField>
+
+            <ProductField
+              name={"EAN"}
+              value={product.ean}
+              flex="2"
+            ></ProductField>
+
+            <ProductField
+              name={"Color"}
+              value={product.color}
+              flex="2"
+            ></ProductField>
+
+            <ProductField
+              flex="2"
+              name={"Weight kg"}
+              value={product.weight.toFixed(2)}
+            ></ProductField>
+
+            <div className={classes.fieldContainer}>
+              <Typography color="textSecondary">Active</Typography>
+              <Checkbox defaultChecked={product.active}></Checkbox>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 }
 

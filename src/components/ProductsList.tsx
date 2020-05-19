@@ -9,7 +9,7 @@ export function ProductsList() {
     <List>
       {data.length > 0
         ? data.map((entry, index) => (
-            <ProductsListEntry product={entry}></ProductsListEntry>
+            <ProductsListEntry product={entry} key={index}></ProductsListEntry>
           ))
         : "There are no products"}
     </List>

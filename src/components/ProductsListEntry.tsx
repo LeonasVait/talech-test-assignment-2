@@ -1,8 +1,9 @@
 import React from "react";
 import { Card, CardContent, Typography, Checkbox } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
 import { Product } from "../fixtures/MockData";
-import { makeStyles } from "@material-ui/styles";
+import { ProductActionsMenu } from "./ProductActionsMenu";
 
 interface Props {
   product: Product;
@@ -33,10 +34,13 @@ export function ProductsListEntry({ product }: Props) {
   return (
     <Card className={classes.root} elevation={3}>
       <CardContent>
-        <Typography className={classes.title}>
-          {product.name.toUpperCase()}
-        </Typography>
-        <div className={classes.inner}>
+        <div className={classes.productHeader}>
+          <Typography className={classes.title}>
+            {product.name.toUpperCase()}
+          </Typography>
+          <ProductActionsMenu></ProductActionsMenu>
+        </div>
+        <div className={classes.productFields}>
           <ProductField
             name={"Type"}
             value={product.type}
@@ -70,15 +74,21 @@ export function ProductsListEntry({ product }: Props) {
     </Card>
   );
 }
+
 const useStyles = makeStyles({
   root: {
+    minWidth: "900px",
     margin: "20px"
   },
-  inner: {
+  productHeader: {
+    display: "flex",
+    justifyContent: "space-between"
+  },
+  productFields: {
     display: "flex"
   },
   title: {
-    fontSize: "2em",
+    fontSize: "1.5em",
     fontWeight: "bold"
   },
   fieldName: {

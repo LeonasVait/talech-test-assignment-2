@@ -20,7 +20,7 @@ export function ProductActionsMenu({ product }: Props) {
   const [anchorElement, setAnchorElement] = useState(null);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isViewDialogOpen, setViewDialogOpen] = useState(false);
-  const [isEditDialogOpen, setEditDialogOpen] = useState(true);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
   const handleClick = (event: any) => {
     setAnchorElement(event.currentTarget);
@@ -54,6 +54,7 @@ export function ProductActionsMenu({ product }: Props) {
       >
         Actions
       </Button>
+
       <Menu
         anchorEl={anchorElement}
         keepMounted
@@ -64,6 +65,7 @@ export function ProductActionsMenu({ product }: Props) {
         <MenuItem onClick={handleEdit}>Edit</MenuItem>
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
+
       <ProductDeleteDialog
         open={isDeleteDialogOpen}
         product={product}
@@ -74,6 +76,7 @@ export function ProductActionsMenu({ product }: Props) {
         <DialogContent>
           <ProductView product={product}></ProductView>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={() => setViewDialogOpen(false)}>Close</Button>
         </DialogActions>

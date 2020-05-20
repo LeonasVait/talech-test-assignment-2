@@ -18,7 +18,6 @@ export function ValidatedTextField({
     <TextField
       label={label}
       variant="outlined"
-      required
       type={fieldType ? fieldType : "text"}
       error={fieldCallbackArgs.meta.error !== undefined}
       helperText={fieldCallbackArgs.meta.error}

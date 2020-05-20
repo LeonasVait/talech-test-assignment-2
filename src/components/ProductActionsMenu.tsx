@@ -5,8 +5,7 @@ import {
   MenuItem,
   Dialog,
   DialogContent,
-  DialogActions,
-  ClickAwayListener
+  DialogActions
 } from "@material-ui/core";
 import { ProductDeleteDialog } from "./ProductDeleteDialog";
 import { Product } from "../fixtures/MockData";
@@ -88,7 +87,10 @@ export function ProductActionsMenu({ product }: Props) {
 
       <Dialog open={isEditDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogContent>
-          <ProductEdit product={product}></ProductEdit>
+          <ProductEdit
+            product={product}
+            onSubmit={() => setEditDialogOpen(false)}
+          ></ProductEdit>
         </DialogContent>
       </Dialog>
     </>

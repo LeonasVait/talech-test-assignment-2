@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, MenuItem, TextField } from "@material-ui/core";
 
-import { Product } from "../fixtures/MockData";
 import { makeStyles } from "@material-ui/styles";
 import { Formik, Form, Field, FormikErrors } from "formik";
+
+import { Product } from "../fixtures/MockData";
 import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";
+import { validateProductForm } from "../validation/FormValidators";
 
 interface Props {
   product?: Product;
+  onSubmit: () => void;
 }
 
-export function ProductEdit({ product }: Props) {
+export function ProductEdit({ product, onSubmit }: Props) {
   const classes = useStyles();
+  const [skipValidation, setSkipValidation] = useState(!product);
 
   let initialValues = getDefaultValues();
   if (product) {
@@ -19,14 +23,20 @@ export function ProductEdit({ product }: Props) {
   }
 
   const submitHandler = (values: Product, actions: any) => {
-    console.log("submit");
+    //TODO dispatch appropriate actions;
+    onSubmit();
   };
 
   return (
     <Formik
       onSubmit={submitHandler}
       initialValues={initialValues}
-      validate={values => validateForm(values, initialValues)}
+      validate={values => {
+        if (!skipValidation) {
+          return validateProductForm(values);
+        }
+      }}
+      validateOnMount
     >
       <Form className={classes.form}>
         <div>
@@ -54,7 +64,9 @@ export function ProductEdit({ product }: Props) {
         </div>
 
         <div>
-          <Button type="submit">Confirm</Button>
+          <Button type="submit" onClick={() => setSkipValidation(false)}>
+            Confirm
+          </Button>
         </div>
       </Form>
     </Formik>
@@ -115,118 +127,4 @@ function StatusField({ field, meta }: any) {
       <MenuItem value="false">Disabled</MenuItem>
     </TextField>
   );
-}
-
-function validateForm(newValues: Product, initialValues: Product) {
-  console.log(newValues);
-
-  let errors: FormikErrors<Product> = {};
-
-  const text3To32 = getTextLengthValidator(3, 32);
-  const text13 = getTextLengthValidator(13, 13);
-  const numbersOnly = getCharsetValidator(
-    "0123456789",
-    "Only digits 0-9 are allowed"
-  );
-  const words = getWordsValidator();
-  const valueRange = getValueRangeValidator(0, 10000);
-
-  errors.name = text3To32(newValues.name) || words(newValues.name);
-  errors.type = text3To32(newValues.type) || words(newValues.type);
-  errors.ean = numbersOnly(newValues.ean) || text13(newValues.ean);
-  errors.color = text3To32(newValues.color) || words(newValues.color);
-  errors.weight = valueRange(newValues.weight);
-  return errors;
-}
-
-function getWordsValidator() {
-  return (data: string) =>
-    getEmptyValidator()(data) ||
-    getTrimValidator()(data) ||
-    getCharsetValidator(
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ",
-      "Only alphanumeric, space and dash allowed"
-    )(data) ||
-    getRegexValidator(/[ -]{2,}/, "Multiple dash and space are not allowed")(
-      data
-    );
-}
-
-function getTextLengthValidator(minLength: number, maxLength: number) {
-  return (data: string) =>
-    getEmptyValidator()(data) ||
-    getTrimValidator()(data) ||
-    getMinLengthValidator(minLength)(data) ||
-    getMaxLengthValidator(maxLength)(data);
-}
-
-function getEmptyValidator() {
-  return (data: string) => {
-    if (data.trim().length === 0) {
-      return `Must not be empty`;
-    }
-  };
-}
-
-function getTrimValidator() {
-  return (data: string) => {
-    if (data.trim().length !== data.length) {
-      return `Spaces at the start and end are not allowed`;
-    }
-  };
-}
-
-function getMinLengthValidator(minLength: number) {
-  return (data: string) => {
-    if (data.length < minLength) {
-      return `Must be at least ${minLength} long`;
-    }
-  };
-}
-
-function getMaxLengthValidator(maxLength: number) {
-  return (data: string) => {
-    if (data.length > maxLength) {
-      return `Must be at most ${maxLength} long`;
-    }
-  };
-}
-
-function getCharsetValidator(charset: string, message: string) {
-  return (data: string) => {
-    for (let c of data.split("")) {
-      if (!charset.includes(c)) {
-        return message;
-      }
-    }
-  };
-}
-
-function getRegexValidator(regex: RegExp, message: string) {
-  return (data: string) => {
-    if (data.match(regex)) {
-      return message;
-    }
-  };
-}
-
-function getValueRangeValidator(min: number, max: number) {
-  return (data: number) =>
-    getMinValueValidator(min)(data) || getMaxValueValidator(max)(data);
-}
-
-function getMinValueValidator(min: number) {
-  return (data: number) => {
-    if (data < min) {
-      return `Value cannot be less than ${min}`;
-    }
-  };
-}
-
-function getMaxValueValidator(max: number) {
-  return (data: number) => {
-    if (data > max) {
-      return `Value cannot be greater than ${max}`;
-    }
-  };
 }

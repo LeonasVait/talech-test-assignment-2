@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, MenuItem, TextField } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/styles";
-import { Formik, Form, Field, FormikErrors } from "formik";
+import { Formik, Form, Field } from "formik";
 
 import { Product } from "../fixtures/MockData";
 import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";

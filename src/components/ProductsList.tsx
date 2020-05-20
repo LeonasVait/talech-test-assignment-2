@@ -43,7 +43,7 @@ export function ProductsList() {
 
       <Dialog open={isEditDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogContent>
-          <ProductEdit></ProductEdit>
+          <ProductEdit onSubmit={() => setEditDialogOpen(false)}></ProductEdit>
         </DialogContent>
       </Dialog>
     </>

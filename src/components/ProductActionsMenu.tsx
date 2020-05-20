@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Menu,
   Button,
   MenuItem,
   Dialog,
   DialogContent,
-  DialogActions
+  DialogActions,
+  ClickAwayListener
 } from "@material-ui/core";
 import { ProductDeleteDialog } from "./ProductDeleteDialog";
 import { Product } from "../fixtures/MockData";
@@ -17,17 +18,18 @@ interface Props {
 }
 
 export function ProductActionsMenu({ product }: Props) {
-  const [anchorElement, setAnchorElement] = useState(null);
+  const anchorRef = useRef(null);
+  const [isMenuOpen, setMenuOpen] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isViewDialogOpen, setViewDialogOpen] = useState(false);
-  const [isEditDialogOpen, setEditDialogOpen] = useState(true);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
-  const handleClick = (event: any) => {
-    setAnchorElement(event.currentTarget);
+  const openMenu = () => {
+    setMenuOpen(true);
   };
 
   const handleClose = () => {
-    setAnchorElement(null);
+    setMenuOpen(false);
   };
 
   const handleEdit = () => {
@@ -50,20 +52,25 @@ export function ProductActionsMenu({ product }: Props) {
       <Button
         aria-controls="simple-menu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={openMenu}
+        ref={anchorRef}
       >
         Actions
       </Button>
+
       <Menu
-        anchorEl={anchorElement}
+        anchorEl={anchorRef.current}
+        open={isMenuOpen}
         keepMounted
-        open={Boolean(anchorElement)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handlePreview}>Preview</MenuItem>
-        <MenuItem onClick={handleEdit}>Edit</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={() => handlePreview()}>Preview</MenuItem>
+
+        <MenuItem onClick={() => handleEdit()}>Edit</MenuItem>
+
+        <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
       </Menu>
+
       <ProductDeleteDialog
         open={isDeleteDialogOpen}
         product={product}

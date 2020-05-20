@@ -80,6 +80,7 @@ export function ProductActionsMenu({ product }: Props) {
         <DialogContent>
           <ProductView product={product}></ProductView>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={() => setViewDialogOpen(false)}>Close</Button>
         </DialogActions>

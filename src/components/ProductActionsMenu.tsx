@@ -10,6 +10,7 @@ import {
 import { ProductDeleteDialog } from "./ProductDeleteDialog";
 import { Product } from "../fixtures/MockData";
 import { ProductView } from "./ProductView";
+import { ProductEdit } from "./ProductEdit";
 
 interface Props {
   product: Product;
@@ -19,9 +20,9 @@ export function ProductActionsMenu({ product }: Props) {
   const [anchorElement, setAnchorElement] = useState(null);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isViewDialogOpen, setViewDialogOpen] = useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(true);
 
   const handleClick = (event: any) => {
-    event.stopPropagation();
     setAnchorElement(event.currentTarget);
   };
 
@@ -30,6 +31,7 @@ export function ProductActionsMenu({ product }: Props) {
   };
 
   const handleEdit = () => {
+    setEditDialogOpen(true);
     handleClose();
   };
 
@@ -75,6 +77,12 @@ export function ProductActionsMenu({ product }: Props) {
         <DialogActions>
           <Button onClick={() => setViewDialogOpen(false)}>Close</Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog open={isEditDialogOpen} onClose={() => setEditDialogOpen(false)}>
+        <DialogContent>
+          <ProductEdit product={product}></ProductEdit>
+        </DialogContent>
       </Dialog>
     </>
   );

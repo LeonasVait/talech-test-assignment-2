@@ -4,132 +4,10 @@ import { Button, MenuItem, TextField } from "@material-ui/core";
 import { Product } from "../fixtures/MockData";
 import { makeStyles } from "@material-ui/styles";
 import { Formik, Form, Field, FormikErrors } from "formik";
+import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";
 
 interface Props {
   product?: Product;
-}
-
-const activeOptions = [
-  { value: true, label: "Enabled" },
-  { value: false, label: "Disabled" }
-];
-
-function getMenuItems() {
-  return activeOptions.map((option, index) => (
-    <MenuItem key={index} value={option.value ? "true" : "false"}>
-      {option.label}
-    </MenuItem>
-  ));
-}
-
-function getDefaultValues(): Product {
-  return {
-    name: "",
-    ean: "",
-    active: false,
-    color: "",
-    type: "",
-    weight: 0
-  };
-}
-
-function getNameField({ field, meta }: any, classes: Record<"field", string>) {
-  return (
-    <TextField
-      label="Product Name"
-      variant="outlined"
-      required
-      className={classes.field}
-      error={meta.error !== undefined}
-      helperText={meta.error}
-      {...field}
-    />
-  );
-}
-
-function getTypeField({ field, meta }: any, classes: Record<"field", string>) {
-  return (
-    <TextField
-      label="Product Type"
-      variant="outlined"
-      required
-      className={classes.field}
-      error={meta.error !== undefined}
-      helperText={meta.error}
-      {...field}
-    />
-  );
-}
-
-function getEanField({ field, meta }: any, classes: Record<"field", string>) {
-  return (
-    <TextField
-      label="EAN"
-      variant="outlined"
-      required
-      className={classes.field}
-      error={meta.error !== undefined}
-      helperText={meta.error}
-      {...field}
-    />
-  );
-}
-
-function getColorField({ field, meta }: any, classes: Record<"field", string>) {
-  return (
-    <TextField
-      label="Color"
-      variant="outlined"
-      required
-      className={classes.field}
-      error={meta.error !== undefined}
-      helperText={meta.error}
-      {...field}
-    />
-  );
-}
-
-function getWeightField(
-  { field, meta }: any,
-  classes: Record<"field", string>
-) {
-  return (
-    <TextField
-      label="Weight"
-      variant="outlined"
-      required
-      type="number"
-      className={classes.field}
-      error={meta.error !== undefined}
-      helperText={meta.error}
-      {...field}
-    />
-  );
-}
-
-function getStatusField(
-  { field, meta }: any,
-  classes: Record<"field", string>
-) {
-  return (
-    <TextField
-      select
-      label="Status"
-      variant="outlined"
-      className={classes.field}
-      error={meta.error !== undefined}
-      helperText={meta.error}
-      {...field}
-    >
-      {getMenuItems()}
-    </TextField>
-  );
-}
-
-function validateForm(data: any) {
-  let errors: FormikErrors<Product> = {};
-  errors.name = "Bad Name";
-  return errors;
 }
 
 export function ProductEdit({ product }: Props) {
@@ -148,35 +26,33 @@ export function ProductEdit({ product }: Props) {
     <Formik
       onSubmit={submitHandler}
       initialValues={initialValues}
-      validate={validateForm}
+      validate={values => validateForm(values, initialValues)}
     >
       <Form className={classes.form}>
         <div>
-          <Field name="name">
-            {(params: any) => getNameField(params, classes)}
-          </Field>
+          <Field name="name">{getTextFieldCallback("Product name")}</Field>
         </div>
+
         <div>
-          <Field name="type">
-            {(params: any) => getTypeField(params, classes)}
-          </Field>
-          <Field name="ean">
-            {(params: any) => getEanField(params, classes)}
-          </Field>
+          <Field name="type">{getTextFieldCallback("Product type")}</Field>
+
+          <Field name="ean">{getTextFieldCallback("EAN")}</Field>
         </div>
+
         <div>
-          <Field name="color">
-            {(params: any) => getColorField(params, classes)}
-          </Field>
+          <Field name="color">{getTextFieldCallback("Color")}</Field>
+
           <Field name="weight">
-            {(params: any) => getWeightField(params, classes)}
+            {getTextFieldCallback("Weight", "number")}
           </Field>
         </div>
+
         <div>
           <Field name="active">
-            {(params: any) => getStatusField(params, classes)}
+            {(callbackArgs: any) => StatusField(callbackArgs)}
           </Field>
         </div>
+
         <div>
           <Button type="submit">Confirm</Button>
         </div>
@@ -203,3 +79,154 @@ const useStyles = makeStyles({
   },
   field: {}
 });
+
+function getDefaultValues(): Product {
+  return {
+    name: "",
+    ean: "",
+    active: false,
+    color: "",
+    type: "",
+    weight: 0
+  };
+}
+
+function getTextFieldCallback(label: string, fieldType?: TextFieldType) {
+  return (fieldCallbackArgs: any) => (
+    <ValidatedTextField
+      label={label}
+      fieldCallbackArgs={fieldCallbackArgs}
+      fieldType={fieldType}
+    ></ValidatedTextField>
+  );
+}
+
+function StatusField({ field, meta }: any) {
+  return (
+    <TextField
+      select
+      label="Status"
+      variant="outlined"
+      error={meta.error !== undefined}
+      helperText={meta.error}
+      {...field}
+    >
+      <MenuItem value="true">Enabled</MenuItem>
+      <MenuItem value="false">Disabled</MenuItem>
+    </TextField>
+  );
+}
+
+function validateForm(newValues: Product, initialValues: Product) {
+  console.log(newValues);
+
+  let errors: FormikErrors<Product> = {};
+
+  const text3To32 = getTextLengthValidator(3, 32);
+  const text13 = getTextLengthValidator(13, 13);
+  const numbersOnly = getCharsetValidator(
+    "0123456789",
+    "Only digits 0-9 are allowed"
+  );
+  const words = getWordsValidator();
+  const valueRange = getValueRangeValidator(0, 10000);
+
+  errors.name = text3To32(newValues.name) || words(newValues.name);
+  errors.type = text3To32(newValues.type) || words(newValues.type);
+  errors.ean = numbersOnly(newValues.ean) || text13(newValues.ean);
+  errors.color = text3To32(newValues.color) || words(newValues.color);
+  errors.weight = valueRange(newValues.weight);
+  return errors;
+}
+
+function getWordsValidator() {
+  return (data: string) =>
+    getEmptyValidator()(data) ||
+    getTrimValidator()(data) ||
+    getCharsetValidator(
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ",
+      "Only alphanumeric, space and dash allowed"
+    )(data) ||
+    getRegexValidator(/[ -]{2,}/, "Multiple dash and space are not allowed")(
+      data
+    );
+}
+
+function getTextLengthValidator(minLength: number, maxLength: number) {
+  return (data: string) =>
+    getEmptyValidator()(data) ||
+    getTrimValidator()(data) ||
+    getMinLengthValidator(minLength)(data) ||
+    getMaxLengthValidator(maxLength)(data);
+}
+
+function getEmptyValidator() {
+  return (data: string) => {
+    if (data.trim().length === 0) {
+      return `Must not be empty`;
+    }
+  };
+}
+
+function getTrimValidator() {
+  return (data: string) => {
+    if (data.trim().length !== data.length) {
+      return `Spaces at the start and end are not allowed`;
+    }
+  };
+}
+
+function getMinLengthValidator(minLength: number) {
+  return (data: string) => {
+    if (data.length < minLength) {
+      return `Must be at least ${minLength} long`;
+    }
+  };
+}
+
+function getMaxLengthValidator(maxLength: number) {
+  return (data: string) => {
+    if (data.length > maxLength) {
+      return `Must be at most ${maxLength} long`;
+    }
+  };
+}
+
+function getCharsetValidator(charset: string, message: string) {
+  return (data: string) => {
+    for (let c of data.split("")) {
+      if (!charset.includes(c)) {
+        return message;
+      }
+    }
+  };
+}
+
+function getRegexValidator(regex: RegExp, message: string) {
+  return (data: string) => {
+    if (data.match(regex)) {
+      return message;
+    }
+  };
+}
+
+function getValueRangeValidator(min: number, max: number) {
+  return (data: number) =>
+    getMinValueValidator(min)(data) || getMaxValueValidator(max)(data);
+}
+
+function getMinValueValidator(min: number) {
+  return (data: number) => {
+    if (data < min) {
+      return `Value cannot be less than ${min}`;
+    }
+  };
+}
+
+function getMaxValueValidator(max: number) {
+  return (data: number) => {
+    if (data > max) {
+      return `Value cannot be greater than ${max}`;
+    }
+  };
+}

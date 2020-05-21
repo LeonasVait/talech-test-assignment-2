@@ -4,7 +4,7 @@ import { Button, MenuItem, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { Formik, Form, Field } from "formik";
 
-import { Product } from "../fixtures/MockData";
+import { Product } from "../services/ProductsService";
 import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";
 import { validateProductForm } from "../validation/FormValidators";
 

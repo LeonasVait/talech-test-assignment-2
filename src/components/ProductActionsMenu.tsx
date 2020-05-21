@@ -8,7 +8,7 @@ import {
   DialogActions
 } from "@material-ui/core";
 import { ProductDeleteDialog } from "./ProductDeleteDialog";
-import { Product } from "../fixtures/MockData";
+import { Product } from "../services/ProductsService";
 import { ProductView } from "./ProductView";
 import { ProductEdit } from "./ProductEdit";
 

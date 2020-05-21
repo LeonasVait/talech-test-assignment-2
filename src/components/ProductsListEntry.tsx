@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Typography, Checkbox } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 
-import { Product } from "../fixtures/MockData";
+import { Product } from "../services/ProductsService";
 import { ProductActionsMenu } from "./ProductActionsMenu";
 
 interface Props {

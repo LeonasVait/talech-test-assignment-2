@@ -7,11 +7,12 @@ import {
   Dialog
 } from "@material-ui/core";
 
-import { data } from "../fixtures/MockData";
+import { getProducts } from "../services/ProductsService";
 import { ProductsListEntry } from "./ProductsListEntry";
 import { ProductEdit } from "./ProductEdit";
 
-function getProducts() {
+function getProductsList() {
+  const data = getProducts();
   if (data.length > 0) {
     return data.map((entry, index) => (
       <ProductsListEntry product={entry} key={index}></ProductsListEntry>
@@ -29,7 +30,7 @@ export function ProductsList() {
   return (
     <>
       <List>
-        {getProducts()}
+        {getProductsList()}
         <div className={classes.listFooter}>
           <Fab
             color="primary"

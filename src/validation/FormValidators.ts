@@ -1,5 +1,5 @@
 import { FormikErrors } from "formik";
-import { Product } from "../fixtures/MockData";
+import { Product } from "../services/ProductsService";
 
 export function validateProductForm(newValues: Product) {
   let errors: FormikErrors<Product> = {};
@@ -39,10 +39,9 @@ export function getWordsValidator() {
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ",
       "Only alphanumeric, space and dash allowed"
     )(data) ||
-    getRegexValidator(
-      /[ -]{2,}/,
-      "Multiple dash and space are not allowed"
-    )(data);
+    getRegexValidator(/[ -]{2,}/, "Multiple dash and space are not allowed")(
+      data
+    );
 }
 
 export function getTextLengthValidator(minLength: number, maxLength: number) {

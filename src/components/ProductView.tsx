@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../fixtures/MockData";
+import { Product } from "../services/ProductsService";
 import { makeStyles, Typography } from "@material-ui/core";
 
 interface Props {

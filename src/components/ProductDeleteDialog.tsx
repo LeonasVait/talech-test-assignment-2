@@ -8,7 +8,7 @@ import {
   DialogActions
 } from "@material-ui/core";
 
-import { Product } from "../fixtures/MockData";
+import { Product } from "../services/ProductsService";
 
 interface Props {
   open: boolean;

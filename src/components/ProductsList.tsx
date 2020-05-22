@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   List,
   Fab,
@@ -7,12 +7,13 @@ import {
   Dialog
 } from "@material-ui/core";
 
-import { getProducts } from "../services/ProductsService";
+import { Product } from "../services/ProductsService";
 import { ProductsListEntry } from "./ProductsListEntry";
 import { ProductEdit } from "./ProductEdit";
+import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
+import { loadProducts } from "../state/reducers/productsList";
 
-function getProductsList() {
-  const data = getProducts();
+function getProductsList(data: Product[]) {
   if (data.length > 0) {
     return data.map((entry, index) => (
       <ProductsListEntry product={entry} key={index}></ProductsListEntry>
@@ -25,12 +26,20 @@ function getProductsList() {
 
 export function ProductsList() {
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const data = useSelector<any, Product[]>(
+    (state: any) => state.productsList.products
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadProducts());
+  }, []);
 
   const classes = useStyles();
   return (
     <>
       <List>
-        {getProductsList()}
+        {getProductsList(data)}
         <div className={classes.listFooter}>
           <Fab
             color="primary"

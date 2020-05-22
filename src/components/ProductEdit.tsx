@@ -4,21 +4,27 @@ import { Button, MenuItem, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { Formik, Form, Field } from "formik";
 
-import { Product } from "../services/ProductsService";
+import { Product, getProduct } from "../services/ProductsService";
 import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";
 import { validateProductForm } from "../validation/FormValidators";
 
 interface Props {
-  product?: Product;
+  productId?: number;
   onSubmit: () => void;
 }
 
-export function ProductEdit({ product, onSubmit }: Props) {
+export function ProductEdit({ productId, onSubmit }: Props) {
   const classes = useStyles();
-  const [skipValidation, setSkipValidation] = useState(!product);
+
+  const [skipValidation, setSkipValidation] = useState(!productId);
 
   let initialValues = getDefaultValues();
-  if (product) {
+
+  if (productId !== undefined) {
+    const product = getProduct(productId);
+    if (!product) {
+      return <div>Product does not exist</div>;
+    }
     initialValues = { ...product };
   }
 
@@ -94,6 +100,7 @@ const useStyles = makeStyles({
 
 function getDefaultValues(): Product {
   return {
+    id: 0,
     name: "",
     ean: "",
     active: false,

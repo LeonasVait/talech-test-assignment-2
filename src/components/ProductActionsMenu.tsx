@@ -8,15 +8,14 @@ import {
   DialogActions
 } from "@material-ui/core";
 import { ProductDeleteDialog } from "./ProductDeleteDialog";
-import { Product } from "../services/ProductsService";
 import { ProductView } from "./ProductView";
 import { ProductEdit } from "./ProductEdit";
 
 interface Props {
-  product: Product;
+  productId: number;
 }
 
-export function ProductActionsMenu({ product }: Props) {
+export function ProductActionsMenu({ productId }: Props) {
   const anchorRef = useRef(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -72,13 +71,13 @@ export function ProductActionsMenu({ product }: Props) {
 
       <ProductDeleteDialog
         open={isDeleteDialogOpen}
-        product={product}
+        productId={productId}
         onClose={() => setDeleteDialogOpen(false)}
       ></ProductDeleteDialog>
 
       <Dialog open={isViewDialogOpen} onClose={() => setViewDialogOpen(false)}>
         <DialogContent>
-          <ProductView product={product}></ProductView>
+          <ProductView productId={productId}></ProductView>
         </DialogContent>
 
         <DialogActions>
@@ -89,7 +88,7 @@ export function ProductActionsMenu({ product }: Props) {
       <Dialog open={isEditDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogContent>
           <ProductEdit
-            product={product}
+            productId={productId}
             onSubmit={() => setEditDialogOpen(false)}
           ></ProductEdit>
         </DialogContent>

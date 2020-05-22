@@ -8,22 +8,38 @@ import {
   DialogActions
 } from "@material-ui/core";
 
-import { Product } from "../services/ProductsService";
+import { getProduct } from "../services/ProductsService";
 
 interface Props {
   open: boolean;
-  product: Product;
+  productId: number;
   onClose: () => void;
 }
 
-export function ProductDeleteDialog({ open, product, onClose }: Props) {
+export function ProductDeleteDialog({ open, productId, onClose }: Props) {
   const handleClose = (isConfirmed: boolean) => {
     onClose();
     if (isConfirmed) {
       //TODO call ProductDelete action
-      console.log(product);
+      console.log(productId);
     }
   };
+
+  const product = getProduct(productId);
+  if (!product) {
+    return (
+      <Dialog
+        onClose={() => handleClose(false)}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <DialogContentText>Product does not exist</DialogContentText>
+        <Button onClick={() => handleClose(false)} color="primary" autoFocus>
+          Cancel
+        </Button>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog

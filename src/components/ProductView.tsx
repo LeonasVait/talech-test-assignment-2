@@ -1,9 +1,9 @@
 import React from "react";
-import { Product } from "../services/ProductsService";
+import { getProduct } from "../services/ProductsService";
 import { makeStyles, Typography } from "@material-ui/core";
 
 interface Props {
-  product: Product;
+  productId: number;
 }
 
 function ProductField({ name, value }: { name: string; value: string }) {
@@ -18,8 +18,14 @@ function ProductField({ name, value }: { name: string; value: string }) {
   );
 }
 
-export function ProductView({ product }: Props) {
+export function ProductView({ productId }: Props) {
   const classes = useStyles();
+
+  const product = getProduct(productId);
+  if (!product) {
+    return <div>product does not exist</div>;
+  }
+
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>

@@ -40,7 +40,7 @@ export function ProductsListEntry({ product }: Props) {
               {product.name.toUpperCase()}
             </Typography>
 
-            <ProductActionsMenu product={product}></ProductActionsMenu>
+            <ProductActionsMenu productId={product.id}></ProductActionsMenu>
           </div>
 
           <div className={classes.productFields}>

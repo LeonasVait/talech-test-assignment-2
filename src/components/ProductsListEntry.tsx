@@ -37,7 +37,14 @@ export function ProductsListEntry({ product }: Props) {
 
   return (
     <>
-      <Card className={classes.root} elevation={3}>
+      <Card
+        className={
+          product.quantity > 0
+            ? classes.root
+            : `${classes.root} ${classes.marked}`
+        }
+        elevation={3}
+      >
         <CardContent>
           <div className={classes.productHeader}>
             <Typography className={classes.title}>
@@ -105,6 +112,11 @@ const useStyles = makeStyles({
     minWidth: "900px",
     margin: "20px"
   },
+
+  marked: {
+    backgroundColor: "rgba(255,0,0,0.2)"
+  },
+
   productHeader: {
     display: "flex",
     justifyContent: "space-between"

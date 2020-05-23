@@ -1,11 +1,9 @@
 import React from "react";
-import { Card, CardContent, Typography, Checkbox } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 
 import { Product } from "../services/ProductsService";
-import { ProductActionsMenu } from "./ProductActionsMenu";
-import { useDispatch } from "react-redux";
-import { updateProduct } from "../state/reducers/productsList";
+import { ProductListEntryHeader } from "./ProductsListEntryHeader";
 
 interface Props {
   product: Product;
@@ -33,7 +31,6 @@ function ProductField({
 
 export function ProductsListEntry({ product }: Props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   return (
     <>
@@ -46,13 +43,7 @@ export function ProductsListEntry({ product }: Props) {
         elevation={3}
       >
         <CardContent>
-          <div className={classes.productHeader}>
-            <Typography className={classes.title}>
-              {product.name.toUpperCase()}
-            </Typography>
-
-            <ProductActionsMenu productId={product.id}></ProductActionsMenu>
-          </div>
+          <ProductListEntryHeader product={product}></ProductListEntryHeader>
 
           <div className={classes.productFields}>
             <ProductField
@@ -78,28 +69,6 @@ export function ProductsListEntry({ product }: Props) {
               name={"Weight kg"}
               value={product.weight.toFixed(2)}
             ></ProductField>
-
-            <ProductField
-              flex="2"
-              name={"Quantity"}
-              value={product.quantity.toFixed(2)}
-            ></ProductField>
-
-            <ProductField
-              flex="2"
-              name={"Price"}
-              value={product.price.toFixed(2)}
-            ></ProductField>
-
-            <div className={classes.fieldContainer}>
-              <Typography color="textSecondary">Active</Typography>
-              <Checkbox
-                checked={product.active}
-                onChange={(event, checked) =>
-                  dispatch(updateProduct({ ...product, active: checked }))
-                }
-              ></Checkbox>
-            </div>
           </div>
         </CardContent>
       </Card>
@@ -112,21 +81,11 @@ const useStyles = makeStyles({
     minWidth: "900px",
     margin: "20px"
   },
-
   marked: {
     backgroundColor: "rgba(255,0,0,0.2)"
   },
-
-  productHeader: {
-    display: "flex",
-    justifyContent: "space-between"
-  },
   productFields: {
     display: "flex"
-  },
-  title: {
-    fontSize: "1.5em",
-    fontWeight: "bold"
   },
   fieldName: {
     marginRight: "10px"

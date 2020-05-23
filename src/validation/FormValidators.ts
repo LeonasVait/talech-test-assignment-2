@@ -109,7 +109,17 @@ export function getRegexValidator(regex: RegExp, message: string) {
 
 export function getValueRangeValidator(min: number, max: number) {
   return (data: number) =>
-    getMinValueValidator(min)(data) || getMaxValueValidator(max)(data);
+    getNaNValueValidator()(data) ||
+    getMinValueValidator(min)(data) ||
+    getMaxValueValidator(max)(data);
+}
+
+export function getNaNValueValidator() {
+  return (data: number) => {
+    if (isNaN(data)) {
+      return `Not a number`;
+    }
+  };
 }
 
 export function getMinValueValidator(min: number) {

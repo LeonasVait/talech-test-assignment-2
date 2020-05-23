@@ -109,20 +109,17 @@ export function getProducts(): Product[] {
   return result;
 }
 
-export function updateProduct(index: number, product: Product) {
-  const products = getProducts();
+export function updateProduct(product: Product) {
+  const products = getProducts().map(entry =>
+    entry.id === product.id ? product : entry
+  );
 
-  if (index >= 0 && index < products.length) {
-    products[index] = product;
-    localStorage.setItem("products", JSON.stringify(products));
-  }
+  localStorage.setItem("products", JSON.stringify(products));
+  return product;
 }
 
-export function deleteProduct(index: number) {
-  const products = getProducts();
+export function deleteProduct(productId: number) {
+  const products = getProducts().filter(({ id }) => id !== productId);
 
-  if (index >= 0 && index < products.length) {
-    products.splice(index, 1);
-    localStorage.setItem("products", JSON.stringify(products));
-  }
+  localStorage.setItem("products", JSON.stringify(products));
 }

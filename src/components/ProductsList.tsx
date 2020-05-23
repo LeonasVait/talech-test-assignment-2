@@ -10,7 +10,7 @@ import {
 import { Product } from "../services/ProductsService";
 import { ProductsListEntry } from "./ProductsListEntry";
 import { ProductEdit } from "./ProductEdit";
-import { useSelector, useDispatch, RootStateOrAny } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { loadProducts } from "../state/reducers/productsList";
 
 function getProductsList(data: Product[]) {
@@ -33,7 +33,7 @@ export function ProductsList() {
 
   useEffect(() => {
     dispatch(loadProducts());
-  }, []);
+  }, [dispatch]);
 
   const classes = useStyles();
   return (

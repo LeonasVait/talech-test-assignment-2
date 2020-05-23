@@ -1,6 +1,7 @@
-import React from "react";
-import { getProduct } from "../services/ProductsService";
+import React, { useEffect } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { loadProduct } from "../state/reducers/productEdit";
 
 interface Props {
   productId: number;
@@ -20,8 +21,18 @@ function ProductField({ name, value }: { name: string; value: string }) {
 
 export function ProductView({ productId }: Props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const product = useSelector((state: any) => state.activeProduct.product);
+  const isLoading = useSelector((state: any) => state.activeProduct.isLoading);
 
-  const product = getProduct(productId);
+  useEffect(() => {
+    dispatch(loadProduct(productId));
+  }, [dispatch, productId]);
+
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+
   if (!product) {
     return <div>product does not exist</div>;
   }

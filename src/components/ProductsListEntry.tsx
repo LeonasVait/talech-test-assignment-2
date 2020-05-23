@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/styles";
 
 import { Product } from "../services/ProductsService";
 import { ProductActionsMenu } from "./ProductActionsMenu";
+import { useDispatch } from "react-redux";
+import { updateProduct } from "../state/reducers/productsList";
 
 interface Props {
   product: Product;
@@ -31,6 +33,8 @@ function ProductField({
 
 export function ProductsListEntry({ product }: Props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   return (
     <>
       <Card className={classes.root} elevation={3}>
@@ -70,7 +74,12 @@ export function ProductsListEntry({ product }: Props) {
 
             <div className={classes.fieldContainer}>
               <Typography color="textSecondary">Active</Typography>
-              <Checkbox defaultChecked={product.active}></Checkbox>
+              <Checkbox
+                checked={product.active}
+                onChange={(event, checked) =>
+                  dispatch(updateProduct({ ...product, active: checked }))
+                }
+              ></Checkbox>
             </div>
           </div>
         </CardContent>

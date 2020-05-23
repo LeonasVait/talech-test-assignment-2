@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogActions
 } from "@material-ui/core";
-import { ProductDeleteDialog } from "./ProductDeleteDialog";
+import { ProductDeleteDialogContent } from "./ProductDeleteDialogContent";
 import { ProductView } from "./ProductView";
 import { ProductEdit } from "./ProductEdit";
 
@@ -69,11 +69,15 @@ export function ProductActionsMenu({ productId }: Props) {
         <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
       </Menu>
 
-      <ProductDeleteDialog
+      <Dialog
         open={isDeleteDialogOpen}
-        productId={productId}
         onClose={() => setDeleteDialogOpen(false)}
-      ></ProductDeleteDialog>
+      >
+        <ProductDeleteDialogContent
+          productId={productId}
+          onClose={() => setDeleteDialogOpen(false)}
+        ></ProductDeleteDialogContent>
+      </Dialog>
 
       <Dialog open={isViewDialogOpen} onClose={() => setViewDialogOpen(false)}>
         <DialogContent>

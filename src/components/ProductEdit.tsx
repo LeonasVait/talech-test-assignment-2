@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, MenuItem, TextField } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/styles";
 import { Formik, Form, Field } from "formik";
 
-import { Product, getProduct } from "../services/ProductsService";
+import { Product } from "../services/ProductsService";
 import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";
 import { validateProductForm } from "../validation/FormValidators";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loadProduct,
+  updateProduct,
+  createProduct
+} from "../state/reducers/productEdit";
 
 interface Props {
   productId?: number;
@@ -15,21 +21,40 @@ interface Props {
 
 export function ProductEdit({ productId, onSubmit }: Props) {
   const classes = useStyles();
-
   const [skipValidation, setSkipValidation] = useState(!productId);
 
   let initialValues = getDefaultValues();
 
-  if (productId !== undefined) {
-    const product = getProduct(productId);
-    if (!product) {
-      return <div>Product does not exist</div>;
+  const dispatch = useDispatch();
+
+  const product = useSelector((state: any) => state.activeProduct.product);
+  const isLoading = useSelector((state: any) => state.activeProduct.isLoading);
+
+  useEffect(() => {
+    if (productId !== undefined) {
+      dispatch(loadProduct(productId));
     }
+  }, [dispatch, productId]);
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
+  if (!product && productId !== undefined) {
+    return <div>Product does not exist</div>;
+  }
+  if (productId !== undefined) {
     initialValues = { ...product };
   }
 
   const submitHandler = (values: Product, actions: any) => {
-    //TODO dispatch appropriate actions;
+    const productValues = { ...values, active: values.active ? true : false };
+    if (!productId) {
+      dispatch(createProduct(productValues));
+    } else {
+      dispatch(updateProduct(productValues));
+    }
+
     onSubmit();
   };
 

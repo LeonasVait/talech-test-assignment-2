@@ -11,13 +11,15 @@ export function validateProductForm(newValues: Product) {
     "Only digits 0-9 are allowed"
   );
   const words = getWordsValidator();
-  const valueRange = getValueRangeValidator(0, 10000);
+  const value0to100000 = getValueRangeValidator(0, 10000);
 
   errors.name = text3To32(newValues.name) || words(newValues.name);
   errors.type = text3To32(newValues.type) || words(newValues.type);
   errors.ean = numbersOnly(newValues.ean) || text13(newValues.ean);
   errors.color = text3To32(newValues.color) || words(newValues.color);
-  errors.weight = valueRange(newValues.weight);
+  errors.weight = value0to100000(newValues.weight);
+  errors.price = value0to100000(newValues.price);
+  errors.quantity = value0to100000(newValues.quantity);
 
   if (
     errors.name ||
@@ -25,6 +27,8 @@ export function validateProductForm(newValues: Product) {
     errors.ean ||
     errors.color ||
     errors.weight ||
+    errors.price ||
+    errors.quantity ||
     errors.active
   ) {
     return errors;
@@ -39,9 +43,10 @@ export function getWordsValidator() {
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ",
       "Only alphanumeric, space and dash allowed"
     )(data) ||
-    getRegexValidator(/[ -]{2,}/, "Multiple dash and space are not allowed")(
-      data
-    );
+    getRegexValidator(
+      /[ -]{2,}/,
+      "Multiple dash and space are not allowed"
+    )(data);
 }
 
 export function getTextLengthValidator(minLength: number, maxLength: number) {

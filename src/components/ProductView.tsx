@@ -58,6 +58,16 @@ export function ProductView({ productId }: Props) {
         name={"Active"}
         value={product.active ? "Enabled" : "Disabled"}
       ></ProductField>
+
+      <ProductField
+        name={"Price"}
+        value={product.price.toFixed(2)}
+      ></ProductField>
+
+      <ProductField
+        name={"Quantity"}
+        value={product.quantity.toFixed(2)}
+      ></ProductField>
     </div>
   );
 }

@@ -89,6 +89,14 @@ export function ProductEdit({ productId, onSubmit }: Props) {
         </div>
 
         <div>
+          <Field name="price">{getTextFieldCallback("Price", "number")}</Field>
+
+          <Field name="quantity">
+            {getTextFieldCallback("Quantity", "number")}
+          </Field>
+        </div>
+
+        <div>
           <Field name="active">
             {(callbackArgs: any) => StatusField(callbackArgs)}
           </Field>
@@ -131,7 +139,9 @@ function getDefaultValues(): Product {
     active: false,
     color: "",
     type: "",
-    weight: 0
+    weight: 0,
+    price: 0,
+    quantity: 0
   };
 }
 

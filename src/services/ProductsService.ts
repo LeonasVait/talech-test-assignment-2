@@ -4,6 +4,8 @@ export interface Product {
   ean: string;
   type: string;
   weight: number;
+  price: number;
+  quantity: number;
   color: string;
   active: boolean;
 }
@@ -17,7 +19,9 @@ export function isProduct(p: any): p is Product {
     product.type !== undefined &&
     product.weight !== undefined &&
     product.color !== undefined &&
-    product.active !== undefined
+    product.active !== undefined &&
+    product.price !== undefined &&
+    product.quantity !== undefined
   );
 }
 
@@ -29,7 +33,9 @@ const initialData: any = [
     type: "Packaging equipment",
     weight: 0.1,
     color: "Blue",
-    active: true
+    active: true,
+    price: 2,
+    quantity: 20
   },
   {
     id: 2,
@@ -38,7 +44,9 @@ const initialData: any = [
     type: "Safety equipment",
     weight: 1,
     color: "Red",
-    active: true
+    active: true,
+    price: 20,
+    quantity: 5
   },
   {
     id: 3,
@@ -47,7 +55,9 @@ const initialData: any = [
     type: "Packaging equipment",
     weight: 0.1,
     color: "Green",
-    active: false
+    active: false,
+    price: 0.2,
+    quantity: 200
   },
   {
     id: 4,
@@ -56,7 +66,9 @@ const initialData: any = [
     type: "Warehouse Equipment",
     weight: 800.6,
     color: "Yellow",
-    active: false
+    active: false,
+    price: 10000,
+    quantity: 2
   },
   {
     id: 5,
@@ -65,7 +77,9 @@ const initialData: any = [
     type: "Packaging equipment",
     weight: 0.1,
     //color: "Gray",
-    active: false
+    active: false,
+    price: 0.3,
+    quantity: 500
   }
 ];
 

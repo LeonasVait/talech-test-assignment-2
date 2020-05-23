@@ -72,6 +72,18 @@ export function ProductsListEntry({ product }: Props) {
               value={product.weight.toFixed(2)}
             ></ProductField>
 
+            <ProductField
+              flex="2"
+              name={"Quantity"}
+              value={product.quantity.toFixed(2)}
+            ></ProductField>
+
+            <ProductField
+              flex="2"
+              name={"Price"}
+              value={product.price.toFixed(2)}
+            ></ProductField>
+
             <div className={classes.fieldContainer}>
               <Typography color="textSecondary">Active</Typography>
               <Checkbox

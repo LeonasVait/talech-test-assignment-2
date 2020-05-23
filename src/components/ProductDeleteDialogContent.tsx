@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import {
   Button,
-  Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
 
-import { getProduct } from "../services/ProductsService";
 import { useSelector, useDispatch } from "react-redux";
 import { loadProduct, deleteProduct } from "../state/reducers/productEdit";
 

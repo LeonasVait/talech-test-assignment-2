@@ -1,3 +1,5 @@
+import { createHistory, updateHistory } from "./HistoryService";
+
 export interface Product {
   id: number;
   name: string;
@@ -25,7 +27,7 @@ export function isProduct(p: any): p is Product {
   );
 }
 
-const initialData: any = [
+const initialData: Product[] = [
   {
     id: 1,
     name: "Packaging tape",
@@ -69,17 +71,6 @@ const initialData: any = [
     active: false,
     price: 10000,
     quantity: 2
-  },
-  {
-    id: 5,
-    name: "Box",
-    ean: "9960606993919",
-    type: "Packaging equipment",
-    weight: 0.1,
-    //color: "Gray",
-    active: false,
-    price: 0.3,
-    quantity: 500
   }
 ];
 
@@ -87,10 +78,12 @@ export function createProduct(product: Product) {
   const products = getProducts();
   product.id = products
     .map(({ id }) => id + 1)
-    .reduce((p, c) => (c > p ? c : p));
+    .reduce((p, c) => (c > p ? c : p), 1);
 
   products.push(product);
   localStorage.setItem("products", JSON.stringify(products));
+
+  createHistory(product);
 }
 
 export function getProduct(id: number) {
@@ -106,6 +99,9 @@ export function getProducts(): Product[] {
 
   if (!item) {
     localStorage.setItem("products", JSON.stringify(initialData));
+    initialData.forEach((entry: Product) => {
+      createHistory(entry);
+    });
     return getProducts();
   }
 
@@ -129,6 +125,8 @@ export function updateProduct(product: Product) {
   );
 
   localStorage.setItem("products", JSON.stringify(products));
+  updateHistory(product);
+
   return product;
 }
 

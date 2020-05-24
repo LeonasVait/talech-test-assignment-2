@@ -1,4 +1,5 @@
 import { Product } from "../../services/ProductsService";
+import { ProductHistory } from "../../services/HistoryService";
 
 export enum ActionTypes {
   LOAD_PRODUCT = "EDIT_LOAD_PRODUCTS",
@@ -10,6 +11,7 @@ export enum ActionTypes {
 
 interface State {
   product?: Product;
+  history?: ProductHistory;
   isLoading: boolean;
 }
 
@@ -17,8 +19,8 @@ export function loadProduct(productId: number) {
   return { type: ActionTypes.LOAD_PRODUCT, productId };
 }
 
-export function setProduct(product: Product) {
-  return { type: ActionTypes.SET_PRODUCT, product };
+export function setProduct(product: Product, history: ProductHistory) {
+  return { type: ActionTypes.SET_PRODUCT, product, history };
 }
 
 export function updateProduct(product: Product) {
@@ -33,19 +35,25 @@ export function deleteProduct(product: Product) {
   return { type: ActionTypes.DELETE_PPRODUCT, product };
 }
 
-export default function productsList(
-  state: State = { product: undefined, isLoading: false },
+export default function activeProduct(
+  state: State = { isLoading: false },
   action: any
 ) {
   switch (action.type) {
     case ActionTypes.SET_PRODUCT:
-      return { ...state, product: action.product, isLoading: false };
+      return {
+        ...state,
+        product: action.product,
+        history: action.history,
+        isLoading: false
+      };
 
     case ActionTypes.LOAD_PRODUCT:
     case ActionTypes.DELETE_PPRODUCT:
       return {
         ...state,
         product: undefined,
+        history: undefined,
         isLoading: true
       };
 

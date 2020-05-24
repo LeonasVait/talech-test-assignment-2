@@ -1,12 +1,12 @@
 import { Product } from "./ProductsService";
 
-interface HistoryEntry {
+export interface HistoryEntry {
   oldValue: number;
   newValue: number;
   time: number;
 }
 
-interface ProductHistory {
+export interface ProductHistory {
   productId: number;
   price: HistoryEntry[];
   quantity: HistoryEntry[];
@@ -104,5 +104,13 @@ export function updateHistory(product: Product) {
   const allHistories = getAllHistories().map(entry =>
     entry.productId === history.productId ? history : entry
   );
+  localStorage.setItem("productsHistory", JSON.stringify(allHistories));
+}
+
+export function deleteHistory(productId: number) {
+  const allHistories = getAllHistories().filter(
+    entry => entry.productId !== productId
+  );
+
   localStorage.setItem("productsHistory", JSON.stringify(allHistories));
 }

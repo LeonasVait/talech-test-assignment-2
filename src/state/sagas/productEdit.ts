@@ -8,17 +8,22 @@ import {
   createProduct,
   deleteProduct
 } from "../../services/ProductsService";
+import { getHistory } from "../../services/HistoryService";
 
 function* getProductTask({ productId }: any) {
   const product = yield getProduct(productId);
+  const history = yield getHistory(productId);
+
   yield delay(1000);
-  yield put({ type: ActionTypes.SET_PRODUCT, product });
+  yield put({ type: ActionTypes.SET_PRODUCT, product, history });
 }
 
 function* updateProductTask({ product }: any) {
   const updated = yield updateProduct(product);
+  const history = yield getHistory(updated.id);
+
   yield delay(1000);
-  yield put({ type: ActionTypes.SET_PRODUCT, updated });
+  yield put({ type: ActionTypes.SET_PRODUCT, updated, history });
   yield put({ type: ActionTypesProductsList.LOAD_PRODUCTS });
 }
 

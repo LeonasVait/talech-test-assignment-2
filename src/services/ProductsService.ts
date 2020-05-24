@@ -1,4 +1,4 @@
-import { createHistory, updateHistory } from "./HistoryService";
+import { createHistory, updateHistory, deleteHistory } from "./HistoryService";
 
 export interface Product {
   id: number;
@@ -134,4 +134,5 @@ export function deleteProduct(productId: number) {
   const products = getProducts().filter(({ id }) => id !== productId);
 
   localStorage.setItem("products", JSON.stringify(products));
+  deleteHistory(productId);
 }

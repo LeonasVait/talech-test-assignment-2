@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Button, MenuItem, TextField } from "@material-ui/core";
-
-import { makeStyles } from "@material-ui/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect, useParams } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
+
+import { Button, MenuItem, TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
 import { Product } from "../services/ProductsService";
 import { ValidatedTextField, TextFieldType } from "./ValidatedTextField";
 import { validateProductForm } from "../validation/FormValidators";
-import { useDispatch, useSelector } from "react-redux";
 import {
   loadProduct,
   updateProduct,
   createProduct
 } from "../state/reducers/productEdit";
 
-interface Props {
-  productId?: number;
-  onSubmit: () => void;
-}
-
-export function ProductEdit({ productId, onSubmit }: Props) {
+export function ProductEdit() {
   const classes = useStyles();
+
+  const { productId } = useParams();
   const [skipValidation, setSkipValidation] = useState(!productId);
+  const [isRedirect, setRedirect] = useState(false);
 
   let initialValues = getDefaultValues();
 
@@ -31,8 +30,9 @@ export function ProductEdit({ productId, onSubmit }: Props) {
   const isLoading = useSelector((state: any) => state.activeProduct.isLoading);
 
   useEffect(() => {
-    if (productId !== undefined) {
-      dispatch(loadProduct(productId));
+    const id = parseInt(productId);
+    if (!isNaN(id)) {
+      dispatch(loadProduct(id));
     }
   }, [dispatch, productId]);
 
@@ -40,9 +40,14 @@ export function ProductEdit({ productId, onSubmit }: Props) {
     return <div>Loading</div>;
   }
 
-  if (!product && productId !== undefined) {
-    return <div>Product does not exist</div>;
+  if (productId !== undefined && !product) {
+    return <Redirect to="/products" />;
   }
+
+  if (isRedirect) {
+    return <Redirect to="/products" />;
+  }
+
   if (productId !== undefined) {
     initialValues = { ...product };
   }
@@ -55,7 +60,7 @@ export function ProductEdit({ productId, onSubmit }: Props) {
       dispatch(updateProduct(productValues));
     }
 
-    onSubmit();
+    setRedirect(true);
   };
 
   return (

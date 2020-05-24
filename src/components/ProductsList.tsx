@@ -1,34 +1,26 @@
-import React, { useState, useEffect } from "react";
-import {
-  List,
-  Fab,
-  makeStyles,
-  DialogContent,
-  Dialog
-} from "@material-ui/core";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink } from "react-router-dom";
+import { List, Fab, makeStyles } from "@material-ui/core";
 
 import { Product } from "../services/ProductsService";
 import { ProductsListEntry } from "./ProductsListEntry";
-import { ProductEdit } from "./ProductEdit";
-import { useSelector, useDispatch } from "react-redux";
 import { loadProducts } from "../state/reducers/productsList";
 
 function getProductsList(data: Product[]) {
-  if (data.length > 0) {
-    return data.map((entry, index) => (
-      <ProductsListEntry product={entry} key={index}></ProductsListEntry>
-    ));
-  } else {
-    //TODO create empty list placeholder
-    return "There are no products";
-  }
+  return data.map((entry, index) => (
+    <ProductsListEntry product={entry} key={index}></ProductsListEntry>
+  ));
 }
 
 export function ProductsList() {
-  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const data = useSelector<any, Product[]>(
     (state: any) => state.productsList.products
   );
+  const isLoading = useSelector<any, boolean>(
+    (state: any) => state.productsList.isLoading
+  );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,24 +30,21 @@ export function ProductsList() {
   const classes = useStyles();
   return (
     <>
+      {isLoading && <div>loading products</div>}
+      {!isLoading && data.length === 0 && <div>There are no products</div>}
       <List>
-        {getProductsList(data)}
+        {data.length > 0 && getProductsList(data)}
         <div className={classes.listFooter}>
           <Fab
             color="primary"
             className={classes.fab}
-            onClick={() => setEditDialogOpen(true)}
+            component={NavLink}
+            to="/products/create"
           >
             New
           </Fab>
         </div>
       </List>
-
-      <Dialog open={isEditDialogOpen} onClose={() => setEditDialogOpen(false)}>
-        <DialogContent>
-          <ProductEdit onSubmit={() => setEditDialogOpen(false)}></ProductEdit>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

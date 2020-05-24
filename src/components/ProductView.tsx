@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, Button } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { loadProduct } from "../state/reducers/productEdit";
 import { ProductDetails } from "./ProductDetails";
 import { HistoryView } from "./HistoryView";
+import { useParams, NavLink, Redirect } from "react-router-dom";
 
-interface Props {
-  productId: number;
-}
-
-export function ProductView({ productId }: Props) {
+export function ProductView() {
   const [activeTab, setActiveTab] = useState(0);
+  const { productId } = useParams();
 
   const dispatch = useDispatch();
   const product = useSelector((state: any) => state.activeProduct.product);
@@ -18,7 +16,10 @@ export function ProductView({ productId }: Props) {
   const isLoading = useSelector((state: any) => state.activeProduct.isLoading);
 
   useEffect(() => {
-    dispatch(loadProduct(productId));
+    const id = parseInt(productId);
+    if (!isNaN(id)) {
+      dispatch(loadProduct(id));
+    }
   }, [dispatch, productId]);
 
   if (isLoading) {
@@ -26,7 +27,7 @@ export function ProductView({ productId }: Props) {
   }
 
   if (!product) {
-    return <div>product does not exist</div>;
+    return <Redirect to="/products" />;
   }
 
   return (
@@ -60,6 +61,9 @@ export function ProductView({ productId }: Props) {
           maxLength={5}
         />
       </div>
+      <Button component={NavLink} to="/products" fullWidth>
+        RETURN TO PRODUCTS LIST
+      </Button>
     </>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Product } from "../services/ProductsService";
 import { HistoryEntry } from "../services/HistoryService";
-import { Typography } from "@material-ui/core";
+import { Typography, makeStyles } from "@material-ui/core";
 
 interface Props {
   product: Product;
@@ -11,15 +11,19 @@ interface Props {
 
 function HistoryListEntry({ oldValue, newValue, time }: HistoryEntry) {
   return (
-    <Typography>
-      {oldValue} {newValue} {time}
-    </Typography>
+    <div>
+      <Typography>
+        Changed from <b>{oldValue}</b> to <b>{newValue}</b>
+      </Typography>
+      <Typography>{new Date(time).toLocaleString()}</Typography>
+    </div>
   );
 }
 
 export function HistoryView({ product, history }: Props) {
+  const classes = useStyles();
   return (
-    <div>
+    <div className={classes.list}>
       {history.slice(0, 5).map((entry, index) => (
         <HistoryListEntry
           key={index}
@@ -31,3 +35,15 @@ export function HistoryView({ product, history }: Props) {
     </div>
   );
 }
+
+const useStyles = makeStyles({
+  list: {
+    "&>div": {
+      display: "flex",
+      justifyContent: "space-between"
+    },
+    "&>div:hover": {
+      backgroundColor: "rgba(0,0,0,0.1)"
+    }
+  }
+});

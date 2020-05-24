@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles, Typography, Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { loadProduct } from "../state/reducers/productEdit";
 import { ProductDetails } from "./ProductDetails";
@@ -43,10 +43,22 @@ export function ProductView({ productId }: Props) {
         <ProductDetails product={product} />
       </div>
       <div hidden={activeTab !== 1}>
-        <HistoryView product={product} history={history.price} />
+        <HistoryView
+          seriesDescription="Price over time"
+          yAxisText="Price"
+          product={product}
+          history={history.price}
+          maxLength={5}
+        />
       </div>
       <div hidden={activeTab !== 2}>
-        <HistoryView product={product} history={history.quantity} />
+        <HistoryView
+          seriesDescription="Quantity over time"
+          yAxisText="Quantity"
+          product={product}
+          history={history.quantity}
+          maxLength={5}
+        />
       </div>
     </>
   );

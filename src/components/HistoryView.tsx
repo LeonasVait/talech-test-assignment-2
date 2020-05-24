@@ -1,12 +1,16 @@
 import React from "react";
+import HighCharts from "react-highcharts";
 
 import { Product } from "../services/ProductsService";
 import { HistoryEntry } from "../services/HistoryService";
 import { Typography, makeStyles } from "@material-ui/core";
 
 interface Props {
+  yAxisText: string;
+  seriesDescription: string;
   product: Product;
   history: HistoryEntry[];
+  maxLength: number;
 }
 
 function HistoryListEntry({ oldValue, newValue, time }: HistoryEntry) {
@@ -20,19 +24,48 @@ function HistoryListEntry({ oldValue, newValue, time }: HistoryEntry) {
   );
 }
 
-export function HistoryView({ product, history }: Props) {
+export function HistoryView({
+  seriesDescription,
+  yAxisText,
+  product,
+  history,
+  maxLength
+}: Props) {
   const classes = useStyles();
+
+  const displayed = history.slice(
+    history.length - 1 - maxLength,
+    history.length
+  );
+
+  const timeOffset = -new Date().getTimezoneOffset() * 60 * 1000;
+
+  const config: Highcharts.Options = {
+    title: { style: { visibility: "hidden" } },
+    yAxis: { title: { text: yAxisText } },
+    xAxis: { type: "datetime" },
+    series: [
+      {
+        name: seriesDescription,
+        data: displayed.map(entry => [entry.time + timeOffset, entry.newValue])
+      }
+    ]
+  };
+
   return (
-    <div className={classes.list}>
-      {history.slice(0, 5).map((entry, index) => (
-        <HistoryListEntry
-          key={index}
-          oldValue={entry.oldValue}
-          newValue={entry.newValue}
-          time={entry.time}
-        />
-      ))}
-    </div>
+    <>
+      <HighCharts config={config}></HighCharts>
+      <div className={classes.list}>
+        {displayed.map((entry, index) => (
+          <HistoryListEntry
+            key={index}
+            oldValue={entry.oldValue}
+            newValue={entry.newValue}
+            time={entry.time}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 

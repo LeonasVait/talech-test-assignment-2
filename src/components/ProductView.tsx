@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Button } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams, Redirect } from "react-router-dom";
+import { Tabs, Tab } from "@material-ui/core";
+
 import { loadProduct } from "../state/reducers/productEdit";
 import { ProductDetails } from "./ProductDetails";
 import { HistoryView } from "./HistoryView";
-import { useParams, NavLink, Redirect } from "react-router-dom";
+import { AppHeader } from "./AppHeader";
 
 export function ProductView() {
-  const [activeTab, setActiveTab] = useState(0);
   const { productId } = useParams();
-
   const dispatch = useDispatch();
+
   const product = useSelector((state: any) => state.activeProduct.product);
   const history = useSelector((state: any) => state.activeProduct.history);
   const isLoading = useSelector((state: any) => state.activeProduct.isLoading);
+
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     const id = parseInt(productId);
@@ -32,14 +35,17 @@ export function ProductView() {
 
   return (
     <>
-      <Tabs
-        value={activeTab}
-        onChange={(event, newValue) => setActiveTab(newValue)}
-      >
-        <Tab label="Product Details" />
-        <Tab label="Price History" />
-        <Tab label="Quantity History" />
-      </Tabs>
+      <AppHeader toListButton>
+        <Tabs
+          value={activeTab}
+          onChange={(event, newValue) => setActiveTab(newValue)}
+        >
+          <Tab label="Product Details" />
+          <Tab label="Price History" />
+          <Tab label="Quantity History" />
+        </Tabs>
+      </AppHeader>
+
       <div hidden={activeTab !== 0}>
         <ProductDetails product={product} />
       </div>
@@ -61,9 +67,6 @@ export function ProductView() {
           maxLength={5}
         />
       </div>
-      <Button component={NavLink} to="/products" fullWidth>
-        RETURN TO PRODUCTS LIST
-      </Button>
     </>
   );
 }

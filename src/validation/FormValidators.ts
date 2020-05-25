@@ -11,7 +11,7 @@ export function validateProductForm(newValues: Product) {
     "Only digits 0-9 are allowed"
   );
   const words = getWordsValidator();
-  const value0to100000 = getValueRangeValidator(0, 10000);
+  const value0to100000 = getValueRangeValidator(0, 100000);
 
   errors.name = text3To32(newValues.name) || words(newValues.name);
   errors.type = text3To32(newValues.type) || words(newValues.type);

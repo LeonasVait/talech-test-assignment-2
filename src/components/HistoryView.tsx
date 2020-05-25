@@ -3,7 +3,6 @@ import HighCharts from "react-highcharts";
 
 import { Product } from "../services/ProductsService";
 import { HistoryEntry } from "../services/HistoryService";
-import { Typography, makeStyles } from "@material-ui/core";
 
 interface Props {
   yAxisText: string;
@@ -13,17 +12,6 @@ interface Props {
   maxLength: number;
 }
 
-function HistoryListEntry({ oldValue, newValue, time }: HistoryEntry) {
-  return (
-    <div>
-      <Typography>
-        Changed from <b>{oldValue}</b> to <b>{newValue}</b>
-      </Typography>
-      <Typography>{new Date(time).toLocaleString()}</Typography>
-    </div>
-  );
-}
-
 export function HistoryView({
   seriesDescription,
   yAxisText,
@@ -31,8 +19,6 @@ export function HistoryView({
   history,
   maxLength
 }: Props) {
-  const classes = useStyles();
-
   const displayed = history.slice(
     history.length - 1 - maxLength,
     history.length
@@ -52,31 +38,5 @@ export function HistoryView({
     ]
   };
 
-  return (
-    <>
-      <HighCharts config={config}></HighCharts>
-      <div className={classes.list}>
-        {displayed.map((entry, index) => (
-          <HistoryListEntry
-            key={index}
-            oldValue={entry.oldValue}
-            newValue={entry.newValue}
-            time={entry.time}
-          />
-        ))}
-      </div>
-    </>
-  );
+  return <HighCharts config={config}></HighCharts>;
 }
-
-const useStyles = makeStyles({
-  list: {
-    "&>div": {
-      display: "flex",
-      justifyContent: "space-between"
-    },
-    "&>div:hover": {
-      backgroundColor: "rgba(0,0,0,0.1)"
-    }
-  }
-});

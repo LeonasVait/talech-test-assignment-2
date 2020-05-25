@@ -29,7 +29,7 @@ export function ProductListEntryHeader({ product }: Props) {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title}>
+      <Typography className={classes.title} style={{ flex: "2" }}>
         {product.name.toUpperCase()}
       </Typography>
 
@@ -46,15 +46,15 @@ export function ProductListEntryHeader({ product }: Props) {
         onConfirm={confirmPrice}
         validator={valueValidator}
       />
-
-      <Typography color="textSecondary">Active</Typography>
-      <Checkbox
-        checked={product.active}
-        onChange={(event, checked) =>
-          dispatch(updateProduct({ ...product, active: checked }))
-        }
-      ></Checkbox>
-
+      <div className={classes.activeInput} style={{ flex: "none" }}>
+        <Typography color="textSecondary">Active</Typography>
+        <Checkbox
+          checked={product.active}
+          onChange={(event, checked) =>
+            dispatch(updateProduct({ ...product, active: checked }))
+          }
+        />
+      </div>
       <ProductActionsMenu productId={product.id}></ProductActionsMenu>
     </div>
   );
@@ -63,7 +63,19 @@ export function ProductListEntryHeader({ product }: Props) {
 const useStyles = makeStyles({
   root: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    height: "70px",
+    "&>*": {
+      marginRight: "30px"
+    },
+    "&>*:last-child": {
+      marginRight: "0"
+    }
+  },
+
+  activeInput: {
+    display: "flex",
+    alignItems: "center"
   },
 
   title: {

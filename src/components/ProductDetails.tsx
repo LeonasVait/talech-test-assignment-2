@@ -58,7 +58,7 @@ export function ProductDetails({ product }: Props) {
 
 const useStyles = makeStyles({
   root: {
-    margin: "20px"
+    margin: "30px"
   },
   productHeader: {
     display: "flex",

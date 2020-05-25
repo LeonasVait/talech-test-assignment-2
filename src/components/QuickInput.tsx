@@ -64,6 +64,7 @@ function QuickInput<T>({
       onChange={event => changeValue(event.target.value)}
       error={!!error}
       helperText={error}
+      style={{ flex: "none" }}
     />
   );
 }

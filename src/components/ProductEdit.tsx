@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useParams } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 
-import { Button, MenuItem, TextField } from "@material-ui/core";
+import { Button, MenuItem, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 
 import { Product } from "../services/ProductsService";
@@ -14,6 +14,7 @@ import {
   updateProduct,
   createProduct
 } from "../state/reducers/productEdit";
+import { AppHeader } from "./AppHeader";
 
 export function ProductEdit() {
   const classes = useStyles();
@@ -36,7 +37,7 @@ export function ProductEdit() {
     }
   }, [dispatch, productId]);
 
-  if (isLoading) {
+  if (productId !== undefined && isLoading) {
     return <div>Loading</div>;
   }
 
@@ -64,67 +65,86 @@ export function ProductEdit() {
   };
 
   return (
-    <Formik
-      onSubmit={submitHandler}
-      initialValues={initialValues}
-      validate={values => {
-        if (!skipValidation) {
-          return validateProductForm(values);
-        }
-      }}
-      validateOnMount
-    >
-      <Form className={classes.form}>
-        <div>
-          <Field name="name">{getTextFieldCallback("Product name")}</Field>
-        </div>
+    <>
+      <AppHeader toListButton>
+        {productId && (
+          <Typography>EDIT {product.name.toUpperCase()}</Typography>
+        )}
+        {!productId && <Typography>CREATE A NEW PRODUCT</Typography>}
+      </AppHeader>
 
-        <div>
-          <Field name="type">{getTextFieldCallback("Product type")}</Field>
+      <Formik
+        onSubmit={submitHandler}
+        initialValues={initialValues}
+        validate={values => {
+          if (!skipValidation) {
+            return validateProductForm(values);
+          }
+        }}
+        validateOnMount
+      >
+        <Form className={classes.form}>
+          <div>
+            <Field name="name">{getTextFieldCallback("Product name")}</Field>
+          </div>
 
-          <Field name="ean">{getTextFieldCallback("EAN")}</Field>
-        </div>
+          <div>
+            <Field name="type">{getTextFieldCallback("Product type")}</Field>
 
-        <div>
-          <Field name="color">{getTextFieldCallback("Color")}</Field>
+            <Field name="ean">{getTextFieldCallback("EAN")}</Field>
+          </div>
 
-          <Field name="weight">
-            {getTextFieldCallback("Weight", "number")}
-          </Field>
-        </div>
+          <div>
+            <Field name="color">{getTextFieldCallback("Color")}</Field>
 
-        <div>
-          <Field name="price">{getTextFieldCallback("Price", "number")}</Field>
+            <Field name="weight">
+              {getTextFieldCallback("Weight", "number")}
+            </Field>
+          </div>
 
-          <Field name="quantity">
-            {getTextFieldCallback("Quantity", "number")}
-          </Field>
-        </div>
+          <div>
+            <Field name="price">
+              {getTextFieldCallback("Price", "number")}
+            </Field>
 
-        <div>
-          <Field name="active">
-            {(callbackArgs: any) => StatusField(callbackArgs)}
-          </Field>
-        </div>
+            <Field name="quantity">
+              {getTextFieldCallback("Quantity", "number")}
+            </Field>
+          </div>
 
-        <div>
-          <Button type="submit" onClick={() => setSkipValidation(false)}>
-            Confirm
-          </Button>
-        </div>
-      </Form>
-    </Formik>
+          <div>
+            <Field name="active">
+              {(callbackArgs: any) => StatusField(callbackArgs)}
+            </Field>
+          </div>
+
+          <div>
+            <Button
+              type="submit"
+              onClick={() => setSkipValidation(false)}
+              variant="outlined"
+              color="primary"
+            >
+              Confirm
+            </Button>
+          </div>
+        </Form>
+      </Formik>
+    </>
   );
 }
 
 const useStyles = makeStyles({
   form: {
+    minWidth: "600px",
+    padding: "30px",
     "&>div": {
-      display: "flex"
+      display: "flex",
+      height: "90px"
     },
     "&>div>*": {
       flex: "1",
-      margin: "10px"
+      margin: "15px"
     },
     "&>div>*:last-child": {
       marginRight: 0
@@ -132,8 +152,7 @@ const useStyles = makeStyles({
     "&>div>*:first-child": {
       marginLeft: 0
     }
-  },
-  field: {}
+  }
 });
 
 function getDefaultValues(): Product {

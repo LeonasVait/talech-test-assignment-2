@@ -1,4 +1,4 @@
-import { put, delay, takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
 
 import { ActionTypes } from "../reducers/productEdit";
 import { ActionTypes as ActionTypesProductsList } from "../reducers/productsList";
@@ -14,7 +14,6 @@ function* getProductTask({ productId }: any) {
   const product = yield getProduct(productId);
   const history = yield getHistory(productId);
 
-  yield delay(1000);
   yield put({ type: ActionTypes.SET_PRODUCT, product, history });
 }
 
@@ -22,21 +21,20 @@ function* updateProductTask({ product }: any) {
   const updated = yield updateProduct(product);
   const history = yield getHistory(updated.id);
 
-  yield delay(1000);
   yield put({ type: ActionTypes.SET_PRODUCT, updated, history });
   yield put({ type: ActionTypesProductsList.LOAD_PRODUCTS });
 }
 
 function* createProductTask({ product }: any) {
   const created = yield createProduct(product);
-  yield delay(1000);
+
   yield put({ type: ActionTypes.SET_PRODUCT, created });
   yield put({ type: ActionTypesProductsList.LOAD_PRODUCTS });
 }
 
 function* deleteProductTask({ product }: any) {
   yield deleteProduct(product.id);
-  yield delay(1000);
+
   yield put({ type: ActionTypesProductsList.LOAD_PRODUCTS });
 }
 

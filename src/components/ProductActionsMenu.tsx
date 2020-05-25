@@ -1,13 +1,23 @@
 import React, { useState, useRef } from "react";
-import { Menu, Button, MenuItem, Dialog } from "@material-ui/core";
-import { ProductDeleteDialogContent } from "./ProductDeleteDialogContent";
 import { NavLink } from "react-router-dom";
+import {
+  Menu,
+  MenuItem,
+  Dialog,
+  IconButton,
+  makeStyles
+} from "@material-ui/core";
+
+import MenuIcon from "@material-ui/icons/Menu";
+
+import { ProductDeleteDialogContent } from "./ProductDeleteDialogContent";
 
 interface Props {
   productId: number;
 }
 
 export function ProductActionsMenu({ productId }: Props) {
+  const classes = useStyles();
   const anchorRef = useRef(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -27,14 +37,16 @@ export function ProductActionsMenu({ productId }: Props) {
 
   return (
     <>
-      <Button
+      <IconButton
+        className={classes.actionsButton}
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={openMenu}
         ref={anchorRef}
+        style={{ flex: "none" }}
       >
-        Actions
-      </Button>
+        <MenuIcon />
+      </IconButton>
 
       <Menu
         anchorEl={anchorRef.current}
@@ -65,3 +77,24 @@ export function ProductActionsMenu({ productId }: Props) {
     </>
   );
 }
+
+const useStyles = makeStyles({
+  actionsButton: {
+    width: "42px",
+    height: "42px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+
+  activeInput: {
+    display: "flex",
+    alignItems: "center"
+  },
+
+  title: {
+    fontSize: "1.5em",
+    fontWeight: "bold"
+  }
+});

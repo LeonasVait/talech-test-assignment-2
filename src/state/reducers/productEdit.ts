@@ -36,7 +36,7 @@ export function deleteProduct(product: Product) {
 }
 
 export default function activeProduct(
-  state: State = { isLoading: false },
+  state: State = { isLoading: true },
   action: any
 ) {
   switch (action.type) {

@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { List, Fab, makeStyles } from "@material-ui/core";
+import { List, Fab, makeStyles, Typography } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 import { Product } from "../services/ProductsService";
 import { ProductsListEntry } from "./ProductsListEntry";
 import { loadProducts } from "../state/reducers/productsList";
+import { AppHeader } from "./AppHeader";
 
 function getProductsList(data: Product[]) {
   return data.map((entry, index) => (
@@ -30,6 +32,9 @@ export function ProductsList() {
   const classes = useStyles();
   return (
     <>
+      <AppHeader>
+        <Typography>PRODUCTS LIST</Typography>
+      </AppHeader>
       {isLoading && <div>loading products</div>}
       {!isLoading && data.length === 0 && <div>There are no products</div>}
       <List>
@@ -41,7 +46,7 @@ export function ProductsList() {
             component={NavLink}
             to="/products/create"
           >
-            New
+            <AddIcon />
           </Fab>
         </div>
       </List>
@@ -54,6 +59,7 @@ const useStyles = makeStyles({
     position: "relative",
     paddingBottom: "70px"
   },
+  title: { fontSize: "1.5em", margin: "30px 30px 0 30px" },
   fab: {
     position: "absolute",
     right: "30px",

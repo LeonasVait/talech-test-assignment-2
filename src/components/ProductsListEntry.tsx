@@ -42,7 +42,7 @@ export function ProductsListEntry({ product }: Props) {
         }
         elevation={3}
       >
-        <CardContent>
+        <CardContent className={classes.cardContent}>
           <ProductListEntryHeader product={product}></ProductListEntryHeader>
 
           <div className={classes.productFields}>
@@ -55,7 +55,7 @@ export function ProductsListEntry({ product }: Props) {
             <ProductField
               name={"EAN"}
               value={product.ean}
-              flex="2"
+              flex="3"
             ></ProductField>
 
             <ProductField
@@ -65,7 +65,7 @@ export function ProductsListEntry({ product }: Props) {
             ></ProductField>
 
             <ProductField
-              flex="2"
+              flex="none"
               name={"Weight kg"}
               value={product.weight.toFixed(2)}
             ></ProductField>
@@ -79,8 +79,13 @@ export function ProductsListEntry({ product }: Props) {
 const useStyles = makeStyles({
   root: {
     minWidth: "900px",
-    margin: "20px"
+    margin: "30px"
   },
+
+  cardContent: {
+    padding: "16px"
+  },
+
   marked: {
     backgroundColor: "rgba(255,0,0,0.2)"
   },
@@ -94,7 +99,7 @@ const useStyles = makeStyles({
     fontWeight: "bold"
   },
   fieldContainer: {
-    margin: "10px",
+    marginRight: "10px",
     display: "flex",
     flex: "1",
     flexDirection: "row",

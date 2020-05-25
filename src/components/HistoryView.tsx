@@ -23,6 +23,7 @@ export function HistoryView({
     history.length - 1 - maxLength,
     history.length
   );
+  displayed.push({ ...displayed[displayed.length - 1], time: Date.now() });
 
   const timeOffset = -new Date().getTimezoneOffset() * 60 * 1000;
 

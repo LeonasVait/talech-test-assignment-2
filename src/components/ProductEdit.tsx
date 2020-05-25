@@ -13,7 +13,7 @@ import {
   loadProduct,
   updateProduct,
   createProduct
-} from "../state/reducers/productEdit";
+} from "../state/reducers/activeProduct";
 import { AppHeader } from "./AppHeader";
 
 export function ProductEdit() {

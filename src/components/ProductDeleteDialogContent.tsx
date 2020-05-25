@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 
 import { useSelector, useDispatch } from "react-redux";
-import { loadProduct, deleteProduct } from "../state/reducers/productEdit";
+import { loadProduct, deleteProduct } from "../state/reducers/activeProduct";
 
 interface Props {
   productId: number;

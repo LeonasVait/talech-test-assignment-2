@@ -1,6 +1,6 @@
 import { put, takeLatest } from "redux-saga/effects";
 
-import { ActionTypes } from "../reducers/productEdit";
+import { ActionTypes } from "../reducers/activeProduct";
 import { ActionTypes as ActionTypesProductsList } from "../reducers/productsList";
 import {
   getProduct,

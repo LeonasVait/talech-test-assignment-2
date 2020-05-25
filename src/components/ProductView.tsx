@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Redirect } from "react-router-dom";
 import { Tabs, Tab } from "@material-ui/core";
 
-import { loadProduct } from "../state/reducers/productEdit";
+import { loadProduct } from "../state/reducers/activeProduct";
 import { ProductDetails } from "./ProductDetails";
 import { HistoryView } from "./HistoryView";
 import { AppHeader } from "./AppHeader";
